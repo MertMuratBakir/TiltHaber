@@ -14,12 +14,12 @@
             </div>
             <div class="col-md-9">
 
-                <% if (persons.length == 0) { %>
+                <% if (blogs.length == 0) { %>
                     <%- include("../partials/no-products")  %>
                 <% } %>
 
-                <% persons.forEach(person => { %>
-                    <%- include("../partials/person-card", person)  %> 
+                <% blogs.forEach(blog => { %>
+                    <%- include("../partials/blog-card", blog)  %> 
                 <% }) %>
 
                 

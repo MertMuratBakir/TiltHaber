@@ -12,17 +12,17 @@
             <div class="col-md-12 mt-3">
                 <% if (action != "undefined" && action=="edit") { %>
                     <div class="alert alert-success">
-                        <%= personid %> id numaralı  person Güncelledi.
+                        <%= blogid %> id numaralı  haber Güncelledi.
                     </div>
                 <% } %>
                 <% if (action != "undefined" && action=="create") { %>
                     <div class="alert alert-success">
-                        Person Eklendi.
+                        Haber Eklendi.
                     </div>
                 <% } %>
                 <% if (action != "undefined" && action=="delete") { %>
                     <div class="alert alert-success">
-                        Person Silindi.
+                        Haber Silindi.
                     </div>
                 <% } %>
                 <table class="table table-bordered table-striped">
@@ -30,29 +30,29 @@
                         <tr>
                             <th style="width: 50px;">id</th>
                             <th style="width: 150px;">resim</th>
-                            <th>isim</th>
+                            <th>baslik</th>
                             <th>kategori</th>
                             <th style="width: 130px;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% persons.forEach(person => { %>
+                        <% blogs.forEach(blog => { %>
                             <tr>
-                                <td>#<%= person.dataValues.id %> </td>
+                                <td>#<%= blog.dataValues.id %> </td>
                                 <td>
-                                    <img src="/static/images/<%= person.dataValues.resim %>" class="img-fluid" alt="">
+                                    <img src="/static/images/<%= blog.dataValues.resim %>" class="img-fluid" alt="">
                                 </td>
                                 <td>
-                                    <%= person.dataValues.isim %> 
+                                    <%= blog.dataValues.baslik %> 
                                 </td>
                                 <td>
-                                    <% person.categories.forEach(category => { %>
+                                    <% blog.categories.forEach(category => { %>
                                         <p> <%= category.name %> </p>
                                     <% }) %>
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-primary" href="/admin/persons/<%= person.dataValues.id %>">edit</a>
-                                    <a class="btn btn-sm btn-danger" href="/admin/person/delete/<%= person.dataValues.id %>">delete</a>
+                                    <a class="btn btn-sm btn-primary" href="/admin/blogs/<%= blog.dataValues.id %>">edit</a>
+                                    <a class="btn btn-sm btn-danger" href="/admin/blog/delete/<%= blog.dataValues.id %>">delete</a>
                                 </td>
                             </tr>
                         <% }) %>

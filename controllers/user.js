@@ -1,23 +1,23 @@
-const Person = require("../models/person");
+const Blog = require("../models/blog");
 const Category = require("../models/category");
 
 const { Op } = require("sequelize");
 
 
-exports.persons_details = async function(req, res) {
+exports.blogs_details = async function(req, res) {
     const slug = req.params.slug;
     try {
-        const person = await Person.findOne({
+        const blog = await Blog.findOne({
             where: {
                 url: slug
             },
             raw: true
         });
 
-        if(person) {
-            return res.render("users/person-details", {
-                title: person.isim,
-                person: person
+        if(blog) {
+            return res.render("users/blog-details", {
+                title: blog.baslik,
+                blog: blog
             });
         }
         res.redirect("/");
@@ -27,13 +27,13 @@ exports.persons_details = async function(req, res) {
     }
 }
 
-exports.person_list = async function(req, res) {
+exports.blog_list = async function(req, res) {
     const size = 3;
     const { page = 0 } = req.query;
     const slug = req.params.slug;
 
     try {
-        const { rows, count } = await Person.findAndCountAll({ 
+        const { rows, count } = await Blog.findAndCountAll({ 
             where: { onay: {[Op.eq]: true } },
             raw: true,
             include: slug ? { model: Category, where: { url: slug } } : null,
@@ -43,9 +43,9 @@ exports.person_list = async function(req, res) {
 
         const categories = await Category.findAll({ raw: true });
 
-        res.render("users/persons", {
-            title: "Tüm Personel",
-            persons: rows,
+        res.render("users/blogs", {
+            title: "Tüm Kurslar",
+            blogs: rows,
             totalItems: count,
             totalPages: Math.ceil(count / size),
             currentPage: page,
@@ -60,7 +60,7 @@ exports.person_list = async function(req, res) {
 
 exports.index = async function(req, res) {
     try {
-        const persons = await Person.findAll({
+        const blogs = await Blog.findAll({
             where: {
                 [Op.and]: [
                     { anasayfa: true },
@@ -72,8 +72,8 @@ exports.index = async function(req, res) {
         const categories = await Category.findAll({ raw: true });
 
         res.render("users/index", {
-            title: "Jail Break",
-            persons: persons,
+            title: "Popüler Kurslar",
+            blogs: blogs,
             categories: categories,
             selectedCategory: null
         })

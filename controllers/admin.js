@@ -1,4 +1,4 @@
-const Person = require("../models/person");
+const Blog = require("../models/blog");
 const Category = require("../models/category");
 const { Op } = require("sequelize");
 const sequelize = require("../data/db");
@@ -6,34 +6,34 @@ const slugField = require("../helpers/slugfield");
 
 const fs = require("fs");
 
-exports.get_person_delete = async function(req, res){
-    const personid = req.params.personid;
+exports.get_blog_delete = async function(req, res){
+    const blogid = req.params.blogid;
 
     try {
-        const person = await Person.findByPk(personid);
+        const blog = await Blog.findByPk(blogid);
 
-        if(person) {
-            return res.render("admin/person-delete", {
-                title: "delete person",
-                person: person
+        if(blog) {
+            return res.render("admin/blog-delete", {
+                title: "delete blog",
+                blog: blog
             });
         }
-        res.redirect("/admin/persons");
+        res.redirect("/admin/blogs");
     }
     catch(err) {
         console.log(err); 
     }
 }
 
-exports.post_person_delete = async function(req, res) {
-    const personid = req.body.personid;
+exports.post_blog_delete = async function(req, res) {
+    const blogid = req.body.blogid;
     try {
-        const person = await Person.findByPk(personid);
-        if(person) {
-            await person.destroy();
-            return res.redirect("/admin/persons?action=delete");
+        const blog = await Blog.findByPk(blogid);
+        if(blog) {
+            await blog.destroy();
+            return res.redirect("/admin/blogs?action=delete");
         }
-        res.redirect("/admin/persons");
+        res.redirect("/admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -71,12 +71,12 @@ exports.post_category_delete = async function(req, res) {
     }
 }
 
-exports.get_person_create = async function(req, res) {
+exports.get_blog_create = async function(req, res) {
     try {
         const categories = await Category.findAll();
 
-        res.render("admin/person-create", {
-            title: "add person",
+        res.render("admin/blog-create", {
+            title: "add blog",
             categories: categories
         });
     }
@@ -85,8 +85,8 @@ exports.get_person_create = async function(req, res) {
     }
 }
 
-exports.post_person_create = async function(req, res) {
-    const isim = req.body.isim;
+exports.post_blog_create = async function(req, res) {
+    const baslik = req.body.baslik;
     const altbaslik = req.body.altbaslik;
     const aciklama = req.body.aciklama;
     const resim = req.file.filename;
@@ -94,16 +94,16 @@ exports.post_person_create = async function(req, res) {
     const onay = req.body.onay == "on"? 1:0;
 
     try {
-        await Person.create({
-            isim: isim,
-            url: slugField(isim),
+        await Blog.create({
+            baslik: baslik,
+            url: slugField(baslik),
             altbaslik: altbaslik,
             aciklama: aciklama,
             resim: resim,
             anasayfa: anasayfa,
             onay: onay
         });
-        res.redirect("/admin/persons?action=create");
+        res.redirect("/admin/blogs?action=create");
     }
     catch(err) {
         console.log(err);
@@ -124,20 +124,21 @@ exports.get_category_create = async function(req, res) {
 exports.post_category_create = async function(req, res) {
     const name = req.body.name;
     try {
-        await Category.create({ name: name, url: slugField(name) }); // url alanını doldur
+        await Category.create({ name: name });
         res.redirect("/admin/categories?action=create");
     }
     catch(err) {
         console.log(err);
     }
 }
-exports.get_person_edit = async function(req, res) {
-    const personid = req.params.personid;
+
+exports.get_blog_edit = async function(req, res) {
+    const blogid = req.params.blogid;
 
     try {
-        const person = await Person.findOne({
+        const blog = await Blog.findOne({
             where: {
-                id: personid
+                id: blogid
             },
             include: {
                 model: Category,
@@ -146,24 +147,24 @@ exports.get_person_edit = async function(req, res) {
         });
         const categories = await Category.findAll();
 
-        if(person) {
-            return res.render("admin/person-edit", {
-                title: person.dataValues.isim,
-                person: person.dataValues,
+        if(blog) {
+            return res.render("admin/blog-edit", {
+                title: blog.dataValues.baslik,
+                blog: blog.dataValues,
                 categories: categories
             });
         }
 
-        res.redirect("admin/persons");
+        res.redirect("admin/blogs");
     }
     catch(err) {
         console.log(err);
     }
 }
 
-exports.post_person_edit = async function(req, res) {
-    const personid = req.body.personid;
-    const isim = req.body.isim;
+exports.post_blog_edit = async function(req, res) {
+    const blogid = req.body.blogid;
+    const baslik = req.body.baslik;
     const altbaslik = req.body.altbaslik;
     const aciklama = req.body.aciklama;
     const kategoriIds = req.body.categories;
@@ -183,28 +184,28 @@ exports.post_person_edit = async function(req, res) {
     const onay = req.body.onay == "on" ? 1 : 0;
 
     try {
-        const person = await Person.findOne({
+        const blog = await Blog.findOne({
             where: {
-                id: personid
+                id: blogid
             },
             include: {
                 model: Category,
                 attributes: ["id"]
             }
         });
-        if(person) {
-            person.isim = isim;
-            person.altbaslik = altbaslik;
-            person.aciklama = aciklama;
-            person.resim = resim;
-            person.anasayfa = anasayfa;
-            person.onay = onay;
-            person.url = url;
+        if(blog) {
+            blog.baslik = baslik;
+            blog.altbaslik = altbaslik;
+            blog.aciklama = aciklama;
+            blog.resim = resim;
+            blog.anasayfa = anasayfa;
+            blog.onay = onay;
+            blog.url = url;
             
             if(kategoriIds == undefined) {
-                await person.removeCategories(person.categories);
+                await blog.removeCategories(blog.categories);
             } else {
-                await person.removeCategories(person.categories);
+                await blog.removeCategories(blog.categories);
                 const selectedCategories = await Category.findAll({
                     where: {
                         id: {
@@ -212,13 +213,13 @@ exports.post_person_edit = async function(req, res) {
                         }
                     }
                 });
-                await person.addCategories(selectedCategories);
+                await blog.addCategories(selectedCategories);
             }
 
-            await person.save();
-            return res.redirect("/admin/persons?action=edit&personid=" + personid);
+            await blog.save();
+            return res.redirect("/admin/blogs?action=edit&blogid=" + blogid);
         }
-        res.redirect("/admin/persons");
+        res.redirect("/admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -226,10 +227,10 @@ exports.post_person_edit = async function(req, res) {
 }
 
 exports.get_category_remove = async function(req, res) {
-    const personid = req.body.personid;
+    const blogid = req.body.blogid;
     const categoryid = req.body.categoryid;
 
-    await sequelize.query(`delete from personCategories where personId=${personid} and categoryId=${categoryid}`);
+    await sequelize.query(`delete from blogCategories where blogId=${blogid} and categoryId=${categoryid}`);
     res.redirect("/admin/categories/" + categoryid);
 }
 
@@ -238,15 +239,15 @@ exports.get_category_edit = async function(req, res) {
 
     try {
         const category = await Category.findByPk(categoryid);
-        const persons = await category.getPersons();
-        const countPerson = await category.countPersons();
+        const blogs = await category.getBlogs();
+        const countBlog = await category.countBlogs();
 
         if(category) {
             return res.render("admin/category-edit", {
                 title: category.dataValues.name,
                 category: category.dataValues,
-                persons: persons,
-                countPerson: countPerson
+                blogs: blogs,
+                countBlog: countBlog
             });
         }
 
@@ -262,9 +263,9 @@ exports.post_category_edit = async function(req, res) {
     const name = req.body.name;
 
     try {
-        await Category.update({ name: name, url: slugField(name) }, {
+        await Category.update({ name: name }, {
             where: {
-                id: categoryid
+              id: categoryid
             }
         });
         return res.redirect("/admin/categories?action=edit&categoryid=" + categoryid);
@@ -274,20 +275,20 @@ exports.post_category_edit = async function(req, res) {
     }
 }
 
-exports.get_persons = async function(req, res) {
+exports.get_blogs = async function(req, res) {
     try {
-        const persons = await Person.findAll({ 
-            attributes: ["id","isim","altbaslik","resim"],
+        const blogs = await Blog.findAll({ 
+            attributes: ["id","baslik","altbaslik","resim"],
             include: {
                 model: Category,
                 attributes: ["name"]
             } 
         });
-        res.render("admin/person-list", {
-            title: "person list",
-            persons: persons,
+        res.render("admin/blog-list", {
+            title: "blog list",
+            blogs: blogs,
             action: req.query.action,
-            personid: req.query.personid
+            blogid: req.query.blogid
         });
     }
     catch(err) {
@@ -300,7 +301,7 @@ exports.get_categories = async function(req, res) {
         const categories = await Category.findAll();
 
         res.render("admin/category-list", {
-            title: "person list",
+            title: "blog list",
             categories: categories,
             action: req.query.action,
             categoryid: req.query.categoryid

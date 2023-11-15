@@ -13,36 +13,36 @@
 
                 <div class="col-md-10">
                     
-                        <input type="hidden" name="personid" value="<%= person.id %>">
-                        <input type="hidden" name="resim" value="<%= person.resim %>">
+                        <input type="hidden" name="blogid" value="<%= blog.id %>">
+                        <input type="hidden" name="resim" value="<%= blog.resim %>">
                         <div class="row mb-3">
-                            <label for="isim" class="col-sm-1 col-form-label">İsim</label>
+                            <label for="baslik" class="col-sm-1 col-form-label">İsim</label>
                             <div class="col-sm-11">
-                                <input type="text" class="form-control" id="isim" name="isim" value="<%= person.isim %>">
+                                <input type="text" class="form-control" id="baslik" name="baslik" value="<%= blog.baslik %>">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="altbaslik" class="col-sm-1 col-form-label">altbaslik</label>
                             <div class="col-sm-11">
-                                <textarea name="altbaslik" class="form-control" rows="5"><%= person.altbaslik %></textarea>
+                                <textarea name="altbaslik" class="form-control" rows="5"><%= blog.altbaslik %></textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="altbaslik" class="col-sm-1 col-form-label">url</label>
                             <div class="col-sm-11">
-                                <input type="text" class="form-control" id="url" name="url" value="<%= person.url %>">
+                                <input type="text" class="form-control" id="url" name="url" value="<%= blog.url %>">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="aciklama" class="col-sm-1 col-form-label">Açıklama</label>
                             <div class="col-sm-11">
-                                <textarea id="editor" name="aciklama" class="form-control" rows="10"><%= person.aciklama %></textarea>
+                                <textarea id="editor" name="aciklama" class="form-control" rows="10"><%= blog.aciklama %></textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="resim" class="col-sm-1 col-form-label">Resim</label>
                             <div class="col-sm-11">
-                                <img src="/static/images/<%= person.resim %> " alt="" width="120">
+                                <img src="/static/images/<%= blog.resim %> " alt="" width="120">
                                 <input type="file" class="form-control" id="resim" name="resim">
                             </div>
                         </div>                    
@@ -57,7 +57,7 @@
                 <div class="col-md-2">
                     <div class="row">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="anasayfa" name="anasayfa" <%= person.anasayfa?"checked":"" %> />
+                            <input class="form-check-input" type="checkbox" id="anasayfa" name="anasayfa" <%= blog.anasayfa?"checked":"" %> />
                             <label class="form-check-label" for="anasayfa">
                                 Anasayfa
                             </label>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="onay" name="onay" <%= person.onay?"checked":"" %> />
+                            <input class="form-check-input" type="checkbox" id="onay" name="onay" <%= blog.onay?"checked":"" %> />
                             <label class="form-check-label" for="onay">
                                 Onay
                             </label>
@@ -80,7 +80,7 @@
                                     id="category_<%= category.id %>" 
                                     name="categories[]" 
                                     value="<%= category.id %> "
-                                    <%= person.categories.some(cat => cat.id == category.id) ? "checked": "" %> />  
+                                    <%= blog.categories.some(cat => cat.id == category.id) ? "checked": "" %> />  
                                 <label class="form-check-label" for="category_<%= category.id %>">
                                     <%= category.name %>
                                 </label>

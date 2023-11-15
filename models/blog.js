@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../data/db");
 
-const Person = sequelize.define("person", {
-    isim: {
+const Blog = sequelize.define("blog", {
+    baslik: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -34,4 +34,4 @@ const Person = sequelize.define("person", {
     timestamps: true
 });
 
-module.exports = Person;
+module.exports = Blog;

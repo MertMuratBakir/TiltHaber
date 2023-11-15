@@ -18,10 +18,10 @@ app.use(userRoutes);
 const sequelize = require("./data/db");
 const dummyData = require("./data/dummy-data");
 const Category = require("./models/category");
-const Person = require("./models/person");
+const Blog = require("./models/blog");
 
-Person.belongsToMany(Category, { through: "personCategories"});
-Category.belongsToMany(Person, { through: "personCategories"});
+Blog.belongsToMany(Category, { through: "blogCategories"});
+Category.belongsToMany(Blog, { through: "blogCategories"});
 
 (async () => {
     await sequelize.sync({ force: true });
