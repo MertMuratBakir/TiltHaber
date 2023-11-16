@@ -72,7 +72,7 @@ exports.index = async function(req, res) {
         const categories = await Category.findAll({ raw: true });
 
         res.render("users/index", {
-            title: "Popüler Kurslar",
+            title: "Tilt Haber",
             blogs: blogs,
             categories: categories,
             selectedCategory: null
