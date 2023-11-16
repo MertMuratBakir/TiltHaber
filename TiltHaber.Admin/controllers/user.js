@@ -15,7 +15,11 @@ exports.blogs_details = async function(req, res) {
         });
 
         if(blog) {
-            return res.render("users/blog-details", {
+            // return res.render("users/blog-details", {
+            //     title: blog.baslik,
+            //     blog: blog
+            // });
+            return res.render("../TiltHaber/views/users/blog-details", {
                 title: blog.baslik,
                 blog: blog
             });
@@ -43,7 +47,16 @@ exports.blog_list = async function(req, res) {
 
         const categories = await Category.findAll({ raw: true });
 
-        res.render("users/blogs", {
+        // res.render("users/blogs", {
+        //     title: "Tüm Kurslar",
+        //     blogs: rows,
+        //     totalItems: count,
+        //     totalPages: Math.ceil(count / size),
+        //     currentPage: page,
+        //     categories: categories,
+        //     selectedCategory: slug
+        // })
+        res.render("../TiltHaber/views/users/blogs", {
             title: "Tüm Kurslar",
             blogs: rows,
             totalItems: count,
@@ -71,12 +84,18 @@ exports.index = async function(req, res) {
         });
         const categories = await Category.findAll({ raw: true });
 
-        res.render("users/index", {
+        res.render("../TiltHaber/views/users/index", {
             title: "Tilt Haber",
             blogs: blogs,
             categories: categories,
             selectedCategory: null
         })
+        // res.render("../TiltHaber/users/index", {
+        //     title: "Tilt Haber",
+        //     blogs: blogs,
+        //     categories: categories,
+        //     selectedCategory: null
+        // })
     }
     catch(err) {
         console.log(err);

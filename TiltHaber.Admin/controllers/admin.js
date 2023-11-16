@@ -13,12 +13,17 @@ exports.get_blog_delete = async function(req, res){
         const blog = await Blog.findByPk(blogid);
 
         if(blog) {
-            return res.render("admin/blog-delete", {
+            // return res.render("admin/blog-delete", {
+            //     title: "delete blog",
+            //     blog: blog
+            // });
+            return res.render("../TiltHaber/views/admin/blog-delete", {
                 title: "delete blog",
                 blog: blog
             });
         }
-        res.redirect("/admin/blogs");
+        // res.redirect("/admin/blogs");
+        res.redirect("../TiltHaber/views/admin/blogs");
     }
     catch(err) {
         console.log(err); 
@@ -31,9 +36,11 @@ exports.post_blog_delete = async function(req, res) {
         const blog = await Blog.findByPk(blogid);
         if(blog) {
             await blog.destroy();
-            return res.redirect("/admin/blogs?action=delete");
+            // return res.redirect("/admin/blogs?action=delete");
+            return res.redirect("../TiltHaber/views/admin/blogs?action=delete");
         }
-        res.redirect("/admin/blogs");
+        // res.redirect("/admin/blogs");
+        res.redirect("../TiltHaber/views/admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -46,7 +53,11 @@ exports.get_category_delete = async function(req, res){
     try {
         const category = await Category.findByPk(categoryid);
 
-        res.render("admin/category-delete", {
+        // res.render("admin/category-delete", {
+        //     title: "delete category",
+        //     category: category
+        // });
+        res.render("../TiltHaber/views/admin/category-delete", {
             title: "delete category",
             category: category
         });
@@ -64,7 +75,8 @@ exports.post_category_delete = async function(req, res) {
                 id: categoryid
             }
         });
-        res.redirect("/admin/categories?action=delete");
+        // res.redirect("/admin/categories?action=delete");
+        res.redirect("../TiltHaber/views/admin/categories?action=delete");
     }
     catch(err) {
         console.log(err);
@@ -75,7 +87,11 @@ exports.get_blog_create = async function(req, res) {
     try {
         const categories = await Category.findAll();
 
-        res.render("admin/blog-create", {
+        // res.render("admin/blog-create", {
+        //     title: "add blog",
+        //     categories: categories
+        // });
+        res.render("../TiltHaber/views/admin/blog-create", {
             title: "add blog",
             categories: categories
         });
@@ -103,7 +119,8 @@ exports.post_blog_create = async function(req, res) {
             anasayfa: anasayfa,
             onay: onay
         });
-        res.redirect("/admin/blogs?action=create");
+        // res.redirect("/admin/blogs?action=create");
+        res.redirect("../TiltHaber/views/admin/blogs?action=create");
     }
     catch(err) {
         console.log(err);
@@ -112,7 +129,10 @@ exports.post_blog_create = async function(req, res) {
 
 exports.get_category_create = async function(req, res) {
     try {
-        res.render("admin/category-create", {
+        // res.render("admin/category-create", {
+        //     title: "add category"
+        // });
+        res.render("../TiltHaber/views/admin/category-create", {
             title: "add category"
         });
     }
@@ -125,7 +145,8 @@ exports.post_category_create = async function(req, res) {
     const name = req.body.name;
     try {
         await Category.create({ name: name });
-        res.redirect("/admin/categories?action=create");
+        // res.redirect("/admin/categories?action=create");
+        res.redirect("../TiltHaber/views/admin/categories?action=create");
     }
     catch(err) {
         console.log(err);
@@ -148,14 +169,20 @@ exports.get_blog_edit = async function(req, res) {
         const categories = await Category.findAll();
 
         if(blog) {
-            return res.render("admin/blog-edit", {
+            // return res.render("admin/blog-edit", {
+            //     title: blog.dataValues.baslik,
+            //     blog: blog.dataValues,
+            //     categories: categories
+            // });
+            return res.render("../TiltHaber/views/admin/blog-edit", {
                 title: blog.dataValues.baslik,
                 blog: blog.dataValues,
                 categories: categories
             });
         }
 
-        res.redirect("admin/blogs");
+        // res.redirect("admin/blogs");
+        res.redirect("../TiltHaber/views/admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -175,7 +202,11 @@ exports.post_blog_edit = async function(req, res) {
     if(req.file) {
         resim = req.file.filename;
 
-        fs.unlink("./public/images/" + req.body.resim, err => {
+        // fs.unlink("./public/images/" + req.body.resim, err => {
+        //     console.log(err);
+        // });
+        
+        fs.unlink("../../TiltHaber/public/images" + req.body.resim, err => {
             console.log(err);
         });
     }
@@ -217,9 +248,11 @@ exports.post_blog_edit = async function(req, res) {
             }
 
             await blog.save();
-            return res.redirect("/admin/blogs?action=edit&blogid=" + blogid);
+            // return res.redirect("/admin/blogs?action=edit&blogid=" + blogid);
+            return res.redirect("../TiltHaber/views/admin/blogs?action=edit&blogid=" + blogid);
         }
-        res.redirect("/admin/blogs");
+        // res.redirect("/admin/blogs");
+        res.redirect("../TiltHaber/views/admin/blogs");
     }
     catch(err) {
         console.log(err);
@@ -231,7 +264,8 @@ exports.get_category_remove = async function(req, res) {
     const categoryid = req.body.categoryid;
 
     await sequelize.query(`delete from blogCategories where blogId=${blogid} and categoryId=${categoryid}`);
-    res.redirect("/admin/categories/" + categoryid);
+    // res.redirect("/admin/categories/" + categoryid);
+    res.redirect("../TiltHaber/views/admin/categories/" + categoryid);
 }
 
 exports.get_category_edit = async function(req, res) {
@@ -243,15 +277,21 @@ exports.get_category_edit = async function(req, res) {
         const countBlog = await category.countBlogs();
 
         if(category) {
-            return res.render("admin/category-edit", {
+            // return res.render("admin/category-edit", {
+            //     title: category.dataValues.name,
+            //     category: category.dataValues,
+            //     blogs: blogs,
+            //     countBlog: countBlog
+            // });
+            return res.render("../TiltHaber/views/admin/category-edit", {
                 title: category.dataValues.name,
                 category: category.dataValues,
                 blogs: blogs,
                 countBlog: countBlog
             });
         }
-
-        res.redirect("admin/categories");
+        // res.redirect("admin/categories");
+        res.redirect("../TiltHaber/views/admin/categories");
     }
     catch(err) {
         console.log(err);
@@ -268,7 +308,8 @@ exports.post_category_edit = async function(req, res) {
               id: categoryid
             }
         });
-        return res.redirect("/admin/categories?action=edit&categoryid=" + categoryid);
+        // return res.redirect("/admin/categories?action=edit&categoryid=" + categoryid);
+        return res.redirect("../TiltHaber/views/admin/categories?action=edit&categoryid=" + categoryid);
     }    
     catch(err) {
         console.log(err);
@@ -284,7 +325,13 @@ exports.get_blogs = async function(req, res) {
                 attributes: ["name"]
             } 
         });
-        res.render("admin/blog-list", {
+        // res.render("admin/blog-list", {
+        //     title: "blog list",
+        //     blogs: blogs,
+        //     action: req.query.action,
+        //     blogid: req.query.blogid
+        // });
+        res.render("../TiltHaber/views/admin/blog-list", {
             title: "blog list",
             blogs: blogs,
             action: req.query.action,
@@ -300,7 +347,13 @@ exports.get_categories = async function(req, res) {
     try {
         const categories = await Category.findAll();
 
-        res.render("admin/category-list", {
+        // res.render("admin/category-list", {
+        //     title: "blog list",
+        //     categories: categories,
+        //     action: req.query.action,
+        //     categoryid: req.query.categoryid
+        // });
+        res.render("../TiltHaber/views/admin/category-list", {
             title: "blog list",
             categories: categories,
             action: req.query.action,
